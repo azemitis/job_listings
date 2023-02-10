@@ -1,0 +1,91 @@
+<template>
+  <main class="flex-auto p-8 bg-brand-gray-2">
+    <ol>
+      <TransitionGroup mode="out-in">
+        <job-listing
+          v-for="job in displayedJobs"
+          :key="job.id"
+          :job="job"
+          data-test="job-listing-sidebar"
+        />
+      </TransitionGroup>
+    </ol>
+
+    <div class="mt-8 mx-auto">
+      <div class="flex flex-row flex-nowrap">
+        <p class="text-sm flex-grow">Page {{ currentPage }}</p>
+
+        <div class="flex items-center justify-center">
+          <router-link
+            v-if="previousPage"
+            :to="{ query: { page: previousPage } }"
+            class="mx-3 text-sm font-semibold text-brand-blue-1"
+            data-test="previous-page-link"
+            >Previous</router-link
+          >
+
+          <router-link
+            v-if="nextPage"
+            :to="{ query: { page: nextPage } }"
+            class="mx-3 text-sm font-semibold text-brand-blue-1"
+            data-test="next-page-link"
+            >Next</router-link
+          >
+        </div>
+      </div>
+    </div>
+  </main>
+</template>
+
+<script lang="ts">
+  import { computed, onMounted, defineComponent } from "vue";
+
+  import useCurrentPage from "../../composables/useCurrentPage";
+  import usePreviousAndNextPages from "../../composables/usePreviousAndNextPages";
+  import { useFilteredJobs, useFetchJobsDispatch } from "../../store/composables";
+  import JobListing from "../../components/JobResults/JobListingSidebar.vue";
+
+  export default defineComponent({
+    name: "JobListingsSidebar",
+    components: {
+      JobListing,
+    },
+    setup() {
+      onMounted(useFetchJobsDispatch);
+
+      const filteredJobs = useFilteredJobs();
+
+      const currentPage = useCurrentPage();
+
+      const maxPage = computed(() => Math.ceil(filteredJobs.value.length / 6));
+      const { previousPage, nextPage } = usePreviousAndNextPages(
+        currentPage,
+        maxPage
+      );
+
+      const displayedJobs = computed(() => {
+        const pageNumber = currentPage.value;
+        const firstJobIndex = (pageNumber - 1) * 6;
+        const lastJobIndex = pageNumber * 6;
+        return filteredJobs.value.slice(firstJobIndex, lastJobIndex);
+      });
+
+      return { displayedJobs, previousPage, currentPage, nextPage };
+    },
+  });
+</script>
+
+<style scoped>
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s;
+}
+</style> 

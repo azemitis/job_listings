@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "es2020",
+      "jsx": "preserve",
+      "moduleResolution": "node",
+      "baseUrl": "./",
+      "strict": true,                 // Enable strict type-checking options
+      "skipLibCheck": true,           // Skip type checking of declaration files
+      "noImplicitAny": false,          // Bypass raising errors on `an
+      "esModuleInterop": true
+        // "types": [
+        //   // "webpack-env",
+        //   "jest"
+        //   ],
+        // "paths": {
+        //   "@/*": [
+        //     "resources/js/*"
+        //   ]
+        //   },
+      },
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.tsx",
+        "resources/js/**/*.vue",
+        "resources/js/**/*.js",
+    //     // "src/**/*.ts",
+    //     // "src/**/*.tsx",
+    //     // "src/**/*.vue",
+    //     // "tests/**/*.ts",
+    //     // "tests/**/*.tsx"
+    ],
+    // "exclude": [
+    //   "node_modules",
+    //   "vendor" 
+    // ]
+  }

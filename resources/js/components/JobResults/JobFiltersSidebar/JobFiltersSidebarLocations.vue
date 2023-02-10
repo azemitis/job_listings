@@ -1,0 +1,44 @@
+<!-- src/components/JobResults/JobFiltersSidebar/JobFiltersSidebarSkills.vue -->
+<template>
+  <div class="mt-5">
+    <input
+      v-model.lazy.trim="locationsSearchTerm"
+      class="
+        p-3
+        h-12
+        border border-solid border-brand-gray-1
+        shadow-gray
+        rounded
+        w-full
+        text-base
+        outline-none 
+      "
+      placeholder="Riga, Tallin"
+      data-test="locations-search-input"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+  import { defineComponent, computed } from "vue";
+  import { useStore } from "vuex";
+
+  import { key } from "../../../store";
+  import { UPDATE_LOCATIONS_SEARCH_TERM } from "../../../store/constants";
+
+  export default defineComponent({
+    name: "JobFiltersSidebarSkills",
+    setup() {
+      const store = useStore(key);
+      const locationsSearchTerm = computed({
+        get() {
+          return store.state.locationsSearchTerm;
+        },
+        set(value) {
+          store.commit(UPDATE_LOCATIONS_SEARCH_TERM, value);
+        },
+      });
+      return { locationsSearchTerm };
+    },
+  });
+</script>
